@@ -1,12 +1,16 @@
 package step.learning.spd_111_android_dunaiev;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import step.learning.spd_111_android_dunaiev.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,7 +24,17 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        findViewById(R.id.main_btn_calc).setOnClickListener(this::onCalcButtonClick);
+        findViewById(R.id.main_btn_game).setOnClickListener(this::onGameButtonClick);
     }
 
+    private void onCalcButtonClick(View view) {
+        Intent intent = new Intent(this, CalcActivity.class);
+        startActivity(intent);
+    }
 
+    private void onGameButtonClick(View view) {
+        Intent intent = new Intent(this, GameActivity.class);
+        startActivity(intent);
+    }
 }
