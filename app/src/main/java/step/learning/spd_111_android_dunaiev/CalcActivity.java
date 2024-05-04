@@ -54,12 +54,78 @@ public class CalcActivity extends AppCompatActivity {
         findViewById(R.id.calc_btn_inverse).setOnClickListener(this::onInverseClick);
         findViewById(R.id.calc_btn_plus).setOnClickListener(this::onPlusClick);
         findViewById(R.id.calc_btn_minus).setOnClickListener(this::onMinusClick);
+        findViewById(R.id.calc_btn_multiply).setOnClickListener(this::onMultiplyClick);
+        findViewById(R.id.calc_btn_divide).setOnClickListener(this::onDivideClick);
         findViewById(R.id.calc_btn_equal).setOnClickListener(this::onEqualClick);
         findViewById(R.id.calc_btn_c).setOnClickListener(this::onClearClick);
         findViewById(R.id.calc_btn_ce).setOnClickListener(this::onClearEntryClick);
+        findViewById(R.id.calc_btn_backspace).setOnClickListener(this::onBackspaceClick);
         findViewById(R.id.calc_btn_pm).setOnClickListener(this::onChangeSignClick);
         findViewById(R.id.calc_btn_square).setOnClickListener(this::onSquareClick);
         findViewById(R.id.calc_btn_sqrt).setOnClickListener(this::onSqrtClick);
+        findViewById(R.id.calc_btn_comma).setOnClickListener(this::onCommaClick);
+        findViewById(R.id.calc_btn_percent).setOnClickListener(this::onPercentClick);
+        findViewById(R.id.main).setOnTouchListener(new OnSwipeListner(this) {
+            @Override
+            public void onSwipeLeft() {
+                String result = tvResult.getText().toString();
+
+                if ( result.isEmpty() ) {
+                    return;
+                }
+                String str = result.substring(0, result.length()-1);
+                tvResult.setText(str);
+            }
+        });
+    }
+    private void onPercentClick (View view) {
+        String result = tvResult.getText().toString();
+
+        if ( result.isEmpty() ) { return; }
+
+        double x = Double.parseDouble(result);
+        if (operation.equals("+") || operation.equals("-")) {
+            x *= operand1 / 100;
+        }
+        else if (operation.equals("*") || operation.equals("/")) {
+            x /= 100;
+        }
+        else {
+            return;
+        }
+
+        String str = (x == (int)x) ? String.valueOf((int)x) : String.valueOf(x);
+        if(str.length() > 13) {
+            str = str.substring(0,13);
+        }
+        tvResult.setText(str);
+    }
+
+    private void onCommaClick (View view) {
+        String result = tvResult.getText().toString();
+        double x = 0.0;
+        if ( !result.isEmpty() ) {
+            x = Double.parseDouble(result);
+        }
+        else {
+            result = "0";
+        }
+
+        if ( x != (int)x ) {
+            return;
+        }
+
+        String str = result + ".";
+        tvResult.setText(str);
+    }
+    private void onBackspaceClick (View view) {
+        String result = tvResult.getText().toString();
+
+        if ( result.isEmpty() ) {
+            return;
+        }
+        String str = result.substring(0, result.length()-1);
+        tvResult.setText(str);
     }
     private void onSqrtClick (View view) {
         String result = tvResult.getText().toString();
@@ -108,7 +174,6 @@ public class CalcActivity extends AppCompatActivity {
     }
     private void onClearEntryClick (View view) {
         tvResult.setText("");
-        operand1 = 0.0;
     }
     public void onClearClick (View view) {
         operand1 = 0.0;
@@ -134,9 +199,9 @@ public class CalcActivity extends AppCompatActivity {
             history_str += " = ";
         }
         else {
-            if (result.isEmpty()) { return;}
+            if (result.isEmpty()) { operand2 = operand1; }
+            else { operand2 = Double.parseDouble(result); }
 
-            operand2 = Double.parseDouble(result);
             history_str += (operand2 == (int)operand2) ? String.valueOf((int)operand2) : String.valueOf(operand2);
             history_str += " = ";
         }
@@ -150,6 +215,16 @@ public class CalcActivity extends AppCompatActivity {
             case "-":
                 x = operand1 - operand2;
                 break;
+            case "*":
+                x = operand1 * operand2;
+                break;
+            case "/":
+                if (operand2 == 0) {
+                    Toast.makeText(this, R.string.calc_zero_division, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                x = operand1 / operand2;
+                break;
         }
         operand1 = x;
 
@@ -161,6 +236,38 @@ public class CalcActivity extends AppCompatActivity {
         tvResult.setText(str);
 
 
+    }
+    private void onMultiplyClick(View view) {
+        String result = tvResult.getText().toString();
+
+        if (!result.isEmpty()) {
+            operand1 = Double.parseDouble(result);
+            operation = "*";
+            operand2 = 0.0;
+        }
+        else {
+            return;
+        }
+
+        String history_str = result + " " + operation + " ";
+        tvHistory.setText(history_str);
+        tvResult.setText("");
+    }
+    private void onDivideClick(View view) {
+        String result = tvResult.getText().toString();
+
+        if (!result.isEmpty()) {
+            operand1 = Double.parseDouble(result);
+            operation = "/";
+            operand2 = 0.0;
+        }
+        else {
+            return;
+        }
+
+        String history_str = result + " " + operation + " ";
+        tvHistory.setText(history_str);
+        tvResult.setText("");
     }
     private void onPlusClick(View view) {
         String result = tvResult.getText().toString();
@@ -177,7 +284,6 @@ public class CalcActivity extends AppCompatActivity {
         String history_str = result + " " + operation + " ";
         tvHistory.setText(history_str);
         tvResult.setText("");
-
     }
     private void onMinusClick(View view) {
         String result = tvResult.getText().toString();
