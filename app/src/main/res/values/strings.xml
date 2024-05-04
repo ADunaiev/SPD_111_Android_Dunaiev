@@ -34,6 +34,7 @@
     <string name="calc_btn_9">9</string>
     <string name="calc_limit_exceeded">Limit exceeded</string>
     <string name="calc_zero_division">Division by zero</string>
+    <string name="calc_sqrt_negative">Value is negative</string>
     <!-- endregion -->
 
     <!-- region GAME ACTIVITY -->

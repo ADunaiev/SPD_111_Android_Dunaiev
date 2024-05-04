@@ -19,6 +19,10 @@ public class CalcActivity extends AppCompatActivity {
     private TextView tvHistory;
     private TextView tvResult;
 
+    private double operand1 = 0.0;
+    private double operand2 = 0.0;
+    private String operation = "";
+
     @SuppressLint("DiscouragedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,7 @@ public class CalcActivity extends AppCompatActivity {
         });
         tvHistory = findViewById( R.id.calc_tv_history );
         tvResult  = findViewById( R.id.calc_tv_result  );
+
         if( savedInstanceState == null ) {  // немає збереженого стану -- перший запуск
             tvResult.setText("0");
         }
@@ -47,16 +52,162 @@ public class CalcActivity extends AppCompatActivity {
             ).setOnClickListener( this::onDigitButtonClick );
         }
         findViewById(R.id.calc_btn_inverse).setOnClickListener(this::onInverseClick);
+        findViewById(R.id.calc_btn_plus).setOnClickListener(this::onPlusClick);
+        findViewById(R.id.calc_btn_minus).setOnClickListener(this::onMinusClick);
+        findViewById(R.id.calc_btn_equal).setOnClickListener(this::onEqualClick);
+        findViewById(R.id.calc_btn_c).setOnClickListener(this::onClearClick);
+        findViewById(R.id.calc_btn_ce).setOnClickListener(this::onClearEntryClick);
+        findViewById(R.id.calc_btn_pm).setOnClickListener(this::onChangeSignClick);
+        findViewById(R.id.calc_btn_square).setOnClickListener(this::onSquareClick);
+        findViewById(R.id.calc_btn_sqrt).setOnClickListener(this::onSqrtClick);
     }
+    private void onSqrtClick (View view) {
+        String result = tvResult.getText().toString();
 
+        if (result.isEmpty()) { return; }
+
+        String history_str = " sqrt( " + result + " ) = ";
+        double x = Double.parseDouble(result);
+
+        if (x < 0) {
+            Toast.makeText(this, R.string.calc_sqrt_negative, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        x = Math.sqrt(x);
+
+        String str = ( x == (int)x ) ? String.valueOf((int)x) : String.valueOf(x);
+        if(str.length() > 13) {
+            str = str.substring(0,13);
+        }
+        tvResult.setText(str);
+        tvHistory.setText(history_str);
+    }
+    private void onSquareClick (View view) {
+        String result = tvResult.getText().toString();
+
+        if (result.isEmpty()) { return; }
+
+        String history_str = result + " * " + result + " = ";
+        double x = Double.parseDouble(result);
+
+        x *= x;
+
+        String str = ( x == (int)x ) ? String.valueOf((int)x) : String.valueOf(x);
+        if(str.length() > 13) {
+            str = str.substring(0,13);
+        }
+        tvResult.setText(str);
+        tvHistory.setText(history_str);
+    }
+    private void onChangeSignClick (View view) {
+        String result = tvResult.getText().toString();
+        double x = Double.parseDouble(result);
+        x *= -1;
+        String str = (x == (int)x) ?  String.valueOf((int)x) : String.valueOf(x);
+        tvResult.setText(str);
+    }
+    private void onClearEntryClick (View view) {
+        tvResult.setText("");
+        operand1 = 0.0;
+    }
+    public void onClearClick (View view) {
+        operand1 = 0.0;
+        operand2 = 0.0;
+        operation = "";
+        tvResult.setText("");
+        tvHistory.setText("");
+    }
+    public void onEqualClick (View view) {
+        String result = tvResult.getText().toString();
+        String history_str = tvHistory.getText().toString();
+
+        /* перевіряємо чи задана операція */
+        if ( operation.isEmpty() ) {
+            return;
+        }
+
+        if (operand2 != 0) {
+            operand1 = (result.isEmpty()) ? 0.0 : Double.parseDouble(result);
+            history_str = (operand1 == (int)operand1) ? String.valueOf((int)operand1) : String.valueOf(operand1);
+            history_str += " " + operation + " ";
+            history_str += (operand2 == (int)operand2) ? String.valueOf((int)operand2) : String.valueOf(operand2);
+            history_str += " = ";
+        }
+        else {
+            if (result.isEmpty()) { return;}
+
+            operand2 = Double.parseDouble(result);
+            history_str += (operand2 == (int)operand2) ? String.valueOf((int)operand2) : String.valueOf(operand2);
+            history_str += " = ";
+        }
+
+        double x = 0.0;
+
+        switch (operation) {
+            case "+":
+                x =  operand1 + operand2;
+                break;
+            case "-":
+                x = operand1 - operand2;
+                break;
+        }
+        operand1 = x;
+
+        String str = (x == (int)x) ? String.valueOf((int)x) : String.valueOf(x);
+        if(str.length() > 13) {
+            str = str.substring(0,13);
+        }
+        tvHistory.setText(history_str);
+        tvResult.setText(str);
+
+
+    }
+    private void onPlusClick(View view) {
+        String result = tvResult.getText().toString();
+
+        if (!result.isEmpty()) {
+            operand1 = Double.parseDouble(result);
+            operation = "+";
+            operand2 = 0.0;
+        }
+        else {
+            return;
+        }
+
+        String history_str = result + " " + operation + " ";
+        tvHistory.setText(history_str);
+        tvResult.setText("");
+
+    }
+    private void onMinusClick(View view) {
+        String result = tvResult.getText().toString();
+
+        if (!result.isEmpty()) {
+            operand1 = Double.parseDouble(result);
+            operation = "-";
+            operand2 = 0.0;
+        }
+        else {
+            return;
+        }
+
+        String history_str = result + " " + operation + " ";
+        tvHistory.setText(history_str);
+        tvResult.setText("");
+
+    }
     private void  onInverseClick(View view) {
         String result = tvResult.getText().toString();
+
+        if (result.isEmpty()) { return; }
         double x = Double.parseDouble(result);
 
         if(x == 0) {
             Toast.makeText(this, R.string.calc_zero_division, Toast.LENGTH_SHORT).show();
             return;
         }
+        String history_str = "1 / " + result + " =";
+        tvHistory.setText(history_str);
         x = 1.0 / x;
         String str = (x == (int)x) ? String.valueOf((int)x) : String.valueOf(x);
         if(str.length() > 13) {
@@ -79,12 +230,14 @@ public class CalcActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);  // потрібно
         outState.putCharSequence( "tvResult", tvResult.getText() );
+        outState.putCharSequence("tvHistory", tvHistory.getText() );
     }
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         tvResult.setText( savedInstanceState.getCharSequence( "tvResult" ) );
+        tvHistory.setText( savedInstanceState.getCharSequence( "tvHistory" ) );
     }
 
     private void onDigitButtonClick(View view) {
