@@ -5,6 +5,7 @@
     <string name="main_tv_title">Основи Андроїд</string>
     <string name="main_btn_calc">Калькулятор</string>
     <string name="main_btn_game">Свайпи. Гра.</string>
+    <string name="main_btn_chat">Мережа. Чат</string>
 
     <!-- region CALC ACTIVITY -->
     <string name="calc_tv_title">Calculator</string>
@@ -37,7 +38,8 @@
     <string name="calc_sqrt_negative">Value is negative</string>
     <!-- endregion -->
 
-    <!-- region GAME ACTIVITY -->
+    <!-- region CHAT ACTIVITY -->
+    <string name="chat_scroller_description">Chat messages</string>
     <!-- endregion -->
 
 </resources>
