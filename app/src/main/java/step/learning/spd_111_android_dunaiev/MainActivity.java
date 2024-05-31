@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onGameButtonClick(View view) {
-        Intent intent = new Intent(this, GameActivity.class);
+        Intent intent = new Intent(this, GameMenuActivity.class);
         startActivity(intent);
     }
     private void onChatButtonClick(View view) {

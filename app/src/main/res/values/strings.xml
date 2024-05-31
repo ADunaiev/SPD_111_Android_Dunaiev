@@ -42,4 +42,17 @@
     <string name="chat_scroller_description">Chat messages</string>
     <!-- endregion -->
 
+    <!-- region GAME ACTIVITY -->
+    <string name="game_name">Snake</string>
+    <string name="game_result">Result</string>
+    <string name="game_score">0</string>
+    <string name="game_new_game">New Game</string>
+    <string name="game_best_scores">Records</string>
+    <string name="game_quit">Quit</string>
+    <string name="game_records_title">Records table</string>
+    <string name="game_player_name">Player name</string>
+    <string name="game_player_name_input">Please enter your name:</string>
+    <string name="game_player_name_button">Save</string>
+    <!-- endregion -->
+
 </resources>
