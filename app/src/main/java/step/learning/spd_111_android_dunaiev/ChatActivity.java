@@ -1,7 +1,10 @@
 package step.learning.spd_111_android_dunaiev;
 
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -19,8 +22,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -35,6 +43,9 @@ public class ChatActivity extends AppCompatActivity {
     // це обмежує вибір виконавчого сервісу.
     ExecutorService executorService = Executors.newSingleThreadExecutor();
     private final List<ChatMessage> chatMessages = new ArrayList<>();
+    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+            "yyyy-MM-dd HH:mm:ss", Locale.UK
+    );
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,24 +99,64 @@ public class ChatActivity extends AppCompatActivity {
         Drawable myBackground = AppCompatResources.getDrawable(
                 getApplicationContext(),
                 R.drawable.chat_msg_my );
-        LinearLayout.LayoutParams msgParams = new LinearLayout.LayoutParams(
+        Drawable friendBackground = AppCompatResources.getDrawable(
+                getApplicationContext(),
+                R.drawable.chat_msg_friend);
+
+        LinearLayout.LayoutParams myMsgParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
-        msgParams.setMargins( 0, 10, 8, 10);
-        msgParams.gravity = Gravity.END;
+        myMsgParams.setMargins( 0, 10, 8, 10);
+        myMsgParams.gravity = Gravity.END;
+
+        LinearLayout.LayoutParams friendMsgParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        friendMsgParams.setMargins( 0, 10, 0, 10 );
+        friendMsgParams.gravity = Gravity.START;
+
         runOnUiThread( () -> {
             LinearLayout container = findViewById(R.id.chat_container);
 
-            for ( ChatMessage message : this.chatMessages ) {
+            for (int i = 0; i < chatMessages.size(); i++ ) {
                 //LinearLayout messageLayout самостійно
-                TextView tv = new TextView(this);
-                tv.setText(message.getAuthor() + " " + message.getText());
-                tv.setBackground( myBackground );
-                tv.setGravity(Gravity.END );
-                tv.setPadding(15,5,15,5);
-                tv.setLayoutParams( msgParams );
-                container.addView(tv);
+                LinearLayout messageLinearLayout = new LinearLayout( this );
+
+                if ( i % 2 == 0 ) {
+                    messageLinearLayout.setBackground( myBackground );
+                    messageLinearLayout.setLayoutParams( myMsgParams );
+                }
+                else {
+                    messageLinearLayout.setBackground( friendBackground );
+                    messageLinearLayout.setLayoutParams( friendMsgParams );
+                }
+
+                messageLinearLayout.setPadding( 15, 5, 15, 5 );
+                messageLinearLayout.setOrientation( LinearLayout.VERTICAL );
+
+                // message author
+                TextView tvAuthor = new TextView( this );
+                tvAuthor.setText( chatMessages.get(i).getAuthor() );
+                tvAuthor.setTextSize( 20 );
+                tvAuthor.setTypeface( null, Typeface.BOLD );
+                messageLinearLayout.addView( tvAuthor );
+
+                // message text
+                TextView tvMessage = new TextView(this);
+                tvMessage.setText( chatMessages.get(i).getText() );
+                tvMessage.setTextSize( 20 );
+                messageLinearLayout.addView( tvMessage );
+
+                // message date
+                TextView tvDate = new TextView( this );
+                tvDate.setText( chatMessages.get(i).getMoment().toString() );
+                tvDate.setTypeface( null, Typeface.ITALIC );
+                tvDate.setTextSize( 12 );
+                messageLinearLayout.addView( tvDate );
+
+                container.addView( messageLinearLayout );
             }
         });
     }
