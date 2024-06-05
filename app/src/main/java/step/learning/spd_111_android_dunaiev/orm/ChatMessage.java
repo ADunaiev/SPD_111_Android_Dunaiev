@@ -1,5 +1,7 @@
 package step.learning.spd_111_android_dunaiev.orm;
 
+import android.view.View;
+
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -11,6 +13,18 @@ public class ChatMessage {
     private String author;
     private String text;
     private Date moment;
+
+    // не дані, а ознака показу
+    private View view;
+
+    public View getView() {
+        return view;
+    }
+
+    public void setView(View view) {
+        this.view = view;
+    }
+
     private static final SimpleDateFormat apiDataFormat = new SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss", Locale.UK
     );

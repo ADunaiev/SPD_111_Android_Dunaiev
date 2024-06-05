@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.util.JsonWriter;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -68,6 +70,8 @@ public class GameActivity extends AppCompatActivity {
     private List<RecordItem> records = new ArrayList<>();
     private static final String FILENAME = "new_records_file.json";
 
+    private Animation opacityAnimation;
+
     private String playerName = "";
 
     @Override
@@ -80,6 +84,7 @@ public class GameActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        opacityAnimation = AnimationUtils.loadAnimation( this, R.anim.opacity );
         // додоємо аналізатор (слухач) свайпів на всю активність. (R.id.main)
         findViewById(R.id.main).setOnTouchListener(new OnSwipeListner(this) {
             @Override
@@ -258,6 +263,7 @@ public class GameActivity extends AppCompatActivity {
                 foodPosition = Vector2.random();
             } while ( isCellInSnake( foodPosition ) );
             gameField[foodPosition.x][foodPosition.y].setText( food );
+            gameField[foodPosition.x][foodPosition.y].startAnimation(opacityAnimation);
         }
         else {
             Vector2 tail = snake.getLast();

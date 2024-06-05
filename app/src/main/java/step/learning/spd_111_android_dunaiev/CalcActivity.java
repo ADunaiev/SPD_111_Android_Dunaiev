@@ -3,6 +3,8 @@ package step.learning.spd_111_android_dunaiev;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +25,8 @@ public class CalcActivity extends AppCompatActivity {
     private double operand2 = 0.0;
     private String operation = "";
 
+    private Animation clickAnimation;
+
     @SuppressLint("DiscouragedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,7 @@ public class CalcActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        clickAnimation = AnimationUtils.loadAnimation( this, R.anim.calc );
         tvHistory = findViewById( R.id.calc_tv_history );
         tvResult  = findViewById( R.id.calc_tv_result  );
 
@@ -347,6 +352,7 @@ public class CalcActivity extends AppCompatActivity {
     }
 
     private void onDigitButtonClick(View view) {
+        view.startAnimation( clickAnimation );
         String result = tvResult.getText().toString();
         if(result.length() >= 10) {
             Toast.makeText(this, R.string.calc_limit_exceeded, Toast.LENGTH_SHORT).show();
