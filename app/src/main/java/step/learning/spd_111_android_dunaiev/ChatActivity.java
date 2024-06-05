@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -73,6 +75,7 @@ public class ChatActivity extends AppCompatActivity {
     private MediaPlayer newMessageSound;
     private boolean isFirstMessageSent;
     private boolean isSoundOn;
+    private Animation clickAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +104,7 @@ public class ChatActivity extends AppCompatActivity {
 
         isFirstMessageSent = false;
         isSoundOn = true;
+        clickAnimation = AnimationUtils.loadAnimation( this, R.anim.calc );
 
         soundBtn.setOnClickListener( this::onSoundClick );
         findViewById( R.id.chat_btn_send ).setOnClickListener( this::onSendClick );
@@ -136,6 +140,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void onSoundClick( View view ) {
+        view.startAnimation( clickAnimation );
         if( isSoundOn ) {
             soundBtn.setImageResource(android.R.drawable.ic_lock_silent_mode);
             isSoundOn = false;
@@ -147,6 +152,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void onSendClick( View view ) {
+        view.startAnimation( clickAnimation );
         String author = etNick.getText().toString();
         String message = etMessage.getText().toString();
         if( author.isEmpty() ) {

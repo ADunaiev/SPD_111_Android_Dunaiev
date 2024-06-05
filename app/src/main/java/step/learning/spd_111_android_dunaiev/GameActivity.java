@@ -71,7 +71,6 @@ public class GameActivity extends AppCompatActivity {
     private static final String FILENAME = "new_records_file.json";
 
     private Animation opacityAnimation;
-
     private String playerName = "";
 
     @Override
@@ -254,6 +253,7 @@ public class GameActivity extends AppCompatActivity {
                 } while (isCellInSnake( bonusPosition ) ||
                         ( bonusPosition.x == foodPosition.x && bonusPosition.y == foodPosition.y ));
                 gameField[bonusPosition.x][bonusPosition.y].setText( bonus );
+                gameField[bonusPosition.x][bonusPosition.y].startAnimation( opacityAnimation );
             }
 
             if ( result % SPEED_CHANGE_APPLES_NUMBER == 0) stepDelay = (int)( stepDelay * ( 1 - SPEED_CHANGE ));
@@ -269,10 +269,12 @@ public class GameActivity extends AppCompatActivity {
             Vector2 tail = snake.getLast();
             snake.remove(tail);
             gameField[tail.x][tail.y].setBackgroundColor( fieldColor );
+
         }
 
         snake.addFirst(newHead);
         gameField[newHead.x][newHead.y].setBackgroundColor( snakeColor );
+
 
         handler.postDelayed(this::step, stepDelay);
     }

@@ -84,6 +84,7 @@ public class CalcActivity extends AppCompatActivity {
         });
     }
     private void onPercentClick (View view) {
+        view.startAnimation( clickAnimation );
         String result = tvResult.getText().toString();
 
         if ( result.isEmpty() ) { return; }
@@ -105,8 +106,8 @@ public class CalcActivity extends AppCompatActivity {
         }
         tvResult.setText(str);
     }
-
     private void onCommaClick (View view) {
+        view.startAnimation( clickAnimation );
         String result = tvResult.getText().toString();
         double x = 0.0;
         if ( !result.isEmpty() ) {
@@ -124,6 +125,7 @@ public class CalcActivity extends AppCompatActivity {
         tvResult.setText(str);
     }
     private void onBackspaceClick (View view) {
+        view.startAnimation( clickAnimation );
         String result = tvResult.getText().toString();
 
         if ( result.isEmpty() ) {
@@ -133,6 +135,7 @@ public class CalcActivity extends AppCompatActivity {
         tvResult.setText(str);
     }
     private void onSqrtClick (View view) {
+        view.startAnimation( clickAnimation );
         String result = tvResult.getText().toString();
 
         if (result.isEmpty()) { return; }
@@ -154,6 +157,7 @@ public class CalcActivity extends AppCompatActivity {
         tvHistory.setText(history_str);
     }
     private void onSquareClick (View view) {
+        view.startAnimation( clickAnimation );
         String result = tvResult.getText().toString();
 
         if (result.isEmpty()) { return; }
@@ -171,6 +175,7 @@ public class CalcActivity extends AppCompatActivity {
         tvHistory.setText(history_str);
     }
     private void onChangeSignClick (View view) {
+        view.startAnimation( clickAnimation );
         String result = tvResult.getText().toString();
         double x = Double.parseDouble(result);
         x *= -1;
@@ -178,9 +183,11 @@ public class CalcActivity extends AppCompatActivity {
         tvResult.setText(str);
     }
     private void onClearEntryClick (View view) {
+        view.startAnimation( clickAnimation );
         tvResult.setText("");
     }
     public void onClearClick (View view) {
+        view.startAnimation( clickAnimation );
         operand1 = 0.0;
         operand2 = 0.0;
         operation = "";
@@ -188,6 +195,7 @@ public class CalcActivity extends AppCompatActivity {
         tvHistory.setText("");
     }
     public void onEqualClick (View view) {
+        view.startAnimation( clickAnimation );
         String result = tvResult.getText().toString();
         String history_str = tvHistory.getText().toString();
 
@@ -243,6 +251,7 @@ public class CalcActivity extends AppCompatActivity {
 
     }
     private void onMultiplyClick(View view) {
+        view.startAnimation( clickAnimation );
         String result = tvResult.getText().toString();
 
         if (!result.isEmpty()) {
@@ -259,6 +268,7 @@ public class CalcActivity extends AppCompatActivity {
         tvResult.setText("");
     }
     private void onDivideClick(View view) {
+        view.startAnimation( clickAnimation );
         String result = tvResult.getText().toString();
 
         if (!result.isEmpty()) {
@@ -275,6 +285,7 @@ public class CalcActivity extends AppCompatActivity {
         tvResult.setText("");
     }
     private void onPlusClick(View view) {
+        view.startAnimation( clickAnimation );
         String result = tvResult.getText().toString();
 
         if (!result.isEmpty()) {
@@ -291,6 +302,7 @@ public class CalcActivity extends AppCompatActivity {
         tvResult.setText("");
     }
     private void onMinusClick(View view) {
+        view.startAnimation( clickAnimation );
         String result = tvResult.getText().toString();
 
         if (!result.isEmpty()) {
@@ -308,6 +320,7 @@ public class CalcActivity extends AppCompatActivity {
 
     }
     private void  onInverseClick(View view) {
+        view.startAnimation( clickAnimation );
         String result = tvResult.getText().toString();
 
         if (result.isEmpty()) { return; }
@@ -343,14 +356,12 @@ public class CalcActivity extends AppCompatActivity {
         outState.putCharSequence( "tvResult", tvResult.getText() );
         outState.putCharSequence("tvHistory", tvHistory.getText() );
     }
-
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         tvResult.setText( savedInstanceState.getCharSequence( "tvResult" ) );
         tvHistory.setText( savedInstanceState.getCharSequence( "tvHistory" ) );
     }
-
     private void onDigitButtonClick(View view) {
         view.startAnimation( clickAnimation );
         String result = tvResult.getText().toString();
